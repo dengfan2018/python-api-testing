@@ -1,0 +1,23 @@
+url: /member/register
+method: post
+parameter:
+  - title: 注册成功-带注册名
+    request_data: { "mobile_phone": "${phone}","pwd": "123456789","type": 1,"reg_name": "kanghetest" }
+    expected: { "code": 0,"msg": "OK" }
+    extract_data:
+    check_sql: select * from member where mobile_phone="${phone}"
+  - title: 成功-不带用户名
+    request_data: { "mobile_phone": "${phone}","pwd": "123456789","type": 1 }
+    expected: { "code": 0,"msg": "OK" }
+    extract_data:
+    check_sql: select * from member where mobile_phone="${phone}"
+  - title: 不输入手机号
+    request_data: { "pwd": "12345678","type": 1 }
+    expected: { "code": 1,"msg": "手机号为空" }
+    extract_data:
+    check_sql:
+  - title: 不输入类型
+    request_data: { "mobile_phone": "${phone}","pwd": "12345678" }
+    expected: { "code": 0,"msg": "OK" }
+    extract_data:
+    check_sql: select * from member where mobile_phone="${phone}"
