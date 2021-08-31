@@ -65,13 +65,13 @@ def data_pre(data, token=HandleIni("conf.ini").get_value("request_headers", "tok
         # 使用eval转成字典.eval过程中，如果表达式有涉及计算，会自动计算。
         data = eval(data)
 
-        # 如果是v3版本，需要加上sign和timestamp2个参数。
-        if HandleIni("conf.ini").get_value("request_headers", "X-Lemonban-Media-Type") == "lemonban.v3" \
-                and token:
-            from utils.utils_encryption import generator_sign
-            sign, timestamp = generator_sign(token)
-            data["sign"] = sign
-            data["timestamp"] = timestamp
+    # 如果是v3版本，需要加上sign和timestamp2个参数。
+    if HandleIni("conf.ini").get_value("request_headers", "X-Lemonban-Media-Type") == "lemonban.v3" \
+            and token:
+        from utils.utils_encryption import generator_sign
+        sign, timestamp = generator_sign(token)
+        data["sign"] = sign
+        data["timestamp"] = timestamp
 
     return data
 

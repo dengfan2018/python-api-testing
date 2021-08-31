@@ -1,0 +1,5 @@
+url: /member/login
+method: post
+parameter:
+  - title: 登录
+    request_data: {"mobile_phone": 18605671115,"pwd":"123456789"}

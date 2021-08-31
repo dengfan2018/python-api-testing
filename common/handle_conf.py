@@ -3,9 +3,10 @@
 # @Author  : kanghe
 # @Email   : 244783726@qq.com
 # @File    : handle_conf.py
-
+import json
 import os
 import configparser
+from string import Template
 
 from ruamel.yaml import YAML
 
@@ -66,24 +67,24 @@ class HandleIni:
 
 
 class HandleYaml:
-    """用来操作.ini格式的配置文件
+    """用来操作 yaml 格式的配置文件/测试数据
     """
 
     @staticmethod
-    def get_data(filename, parent=project.conf_dir):
+    def get_data(filename, parent=project.casedatas_dir):
         yaml = YAML(typ='safe')
         return yaml.load(parent.joinpath(filename))
 
     @staticmethod
-    def get_conf_from_yaml(filename="conf.yaml", parent=project.conf_dir):
-        yaml = YAML(typ='safe')
-        return yaml.load(parent.joinpath(filename))
+    def replace_data(source_data: str or dict, replace_data: dict):
+        if isinstance(source_data, dict):
+            source_data = json.dumps(source_data)
+        data = Template(source_data).safe_substitute(replace_data)
+        return json.loads(data)
 
 
 if __name__ == '__main__':
-    cf = HandleIni()
-    a = cf.get_section_value("request_headers")
+    cases = HandleYaml.get_data("a-register.yaml")
+    print(cases)
 
-    [a.pop(k) for k, v in a.copy().items() if not v]
-    if a:
-        print(a)
+

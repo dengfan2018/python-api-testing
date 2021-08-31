@@ -5,7 +5,7 @@
 # @File    : handle_request.py
 
 
-# import allure
+import allure
 import requests
 
 from common.handle_log import LogHandler
@@ -41,7 +41,6 @@ class HandleHttp:
         h = conf.get_section_value("request_headers")
         [h.pop(k) for k, v in h.copy().items() if not v]
         if headers:
-            logger.info(headers)
             h.update(eval(headers))
         return h
 
@@ -50,10 +49,12 @@ class HandleHttp:
         headers = self.__handle_header(headers)
         url = self.__pre_url(url)
         from utils.utils_data import data_pre
-        data = data_pre(data, conf.get_value("request_headers", "token"))
-        json = data_pre(json, conf.get_value("request_headers", "token"))
+        if data:
+            data = data_pre(data, conf.get_value("request_headers", "token"))
+        if json:
+            json = data_pre(json, conf.get_value("request_headers", "token"))
 
-        # self.create_request_log(url, method, json if json else (params if params else data), headers, **kwargs)
+        self.create_request_log(url, method, json if json else (params if params else data), headers, **kwargs)
 
         try:
             result = requests.request(method=method, url=url, params=params, data=data, json=json,
@@ -64,7 +65,8 @@ class HandleHttp:
             logger.info("请求参数为：{}".format(json if json else (params if params else data)))
             logger.info("实际结果为：{}".format(result.text))
 
-            # self.create_response_log(result.status_code, result.text)
+            self.create_response_log(result.status_code, result.text)
+
             return result
         except Exception as e:
             logger.error(f"------{url} 请求失败------")
@@ -72,15 +74,15 @@ class HandleHttp:
             logger.error(f"request_headers： {headers}")
             logger.exception(e)
 
-    # # 设置一个 allure step，可以将请求信息输出在报告中
-    # @allure.step("请求")
-    # def create_request_log(self, url, method, body, header, **kwargs):
-    #     ...
-    #
-    # # 设置一个 allure step，可以将响应信息输出在报告中
-    # @allure.step('响应')
-    # def create_response_log(self, status_code, body):
-    #     ...
+    # 设置一个 allure step，可以将请求信息输出在报告中
+    @allure.step("请求")
+    def create_request_log(self, url, method, body, header, **kwargs):
+        ...
+
+    # 设置一个 allure step，可以将响应信息输出在报告中
+    @allure.step('响应')
+    def create_response_log(self, status_code, body):
+        ...
 
 
 req = HandleHttp()

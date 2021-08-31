@@ -1,0 +1,13 @@
+url: /member/recharge
+method: post
+parameter:
+  - title: 充值成功-整数
+    request_data: { "member_id": "${member_id}","amount": 600 }
+    expected: { "code": 0,"msg": "OK","data": { "id": "${member_id}","leave_amount": "${money}" } }
+    extract_data:
+    check_sql: select CAST(member.leave_amount AS CHAR) as leave_amount from member where id="${member_id}";
+  - title: 充值成功-1位小数
+    request_data: { "member_id": "${member_id}","amount": 600.1 }
+    expected: { "code": 0,"msg": "OK","data": { "id": "${member_id}","leave_amount": "${money}" } }
+    extract_data:
+    check_sql: select CAST(member.leave_amount AS CHAR) as leave_amount from member where id="${member_id}";
