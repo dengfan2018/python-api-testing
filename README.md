@@ -15,3 +15,13 @@
 
 ## pytest
 
+1. 修改 allure 源码，使得不显示参数化的参数，从而使标题显示正常
+```python
+    # \Lib\site-packages\allure_pytest\listener.py
+        test_result.parameters.extend(
+            [Parameter(name=name, value=represent(value)) for name, value in params.items()])
+
+    # 将上述源码修改为如下
+    
+        test_result.parameters.extend([])
+```

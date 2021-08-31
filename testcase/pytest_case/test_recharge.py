@@ -23,6 +23,7 @@ db = HandleMysql()
 @allure.feature("充值")
 @pytest.mark.parametrize('case', cases['parameter'])
 def test_recharge(case, login):
+    allure.dynamic.title(case['title'])
     member_id, token = login
 
     HandleIni().set_value("request_headers", "token", token)
