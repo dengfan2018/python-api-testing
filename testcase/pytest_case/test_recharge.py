@@ -8,11 +8,12 @@ import allure
 import pytest
 import json
 
+from pytest import assume
+
 from common.handle_conf import HandleYaml, HandleIni
 from common.handle_mysql import HandleMysql
 from common.handle_request import req
 from common.handle_log import log
-
 
 cases = HandleYaml.get_data("a-recharge.yaml")
 db = HandleMysql()
@@ -43,14 +44,17 @@ def test_recharge(case, login):
     # 发起请求 - 给用户充值
     response = req.send(cases["url"], cases["method"], json=case["request_data"])
 
-    assert response.json()["code"] == int(case["expected"]["code"])
-    assert response.json()["msg"] == case["expected"]["msg"]
+    with assume:
+        assert response.json()["code"] == int(case["expected"]["code"])
+    with assume:
+        assert response.json()["msg"] == case["expected"]["msg"]
     if case["check_sql"]:
-        assert response.json()["data"]["id"] == int(case["expected"]["data"]["id"])
-        assert response.json()["data"]["leave_amount"] == case["expected"]["data"]["leave_amount"]
+        with assume:
+            assert response.json()["data"]["id"] == int(case["expected"]["data"]["id"])
+        with assume:
+            assert response.json()["data"]["leave_amount"] == float(case["expected"]["data"]["leave_amount"])
         # 数据库 - 查询当前用户的余额
         user_money_after_recharge = db.query_one(case["check_sql"])[0]
 
-        assert "{:.2f}".format(case["expected"]["data"]["leave_amount"]) == \
-               "{:.2f}".format(float(user_money_after_recharge))
-
+        assume("{:.2f}".format(float(case["expected"]["data"]["leave_amount"])) == "{:.2f}".format(
+            float(user_money_after_recharge)))
