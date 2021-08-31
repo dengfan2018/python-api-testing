@@ -19,6 +19,7 @@ pyasn1==0.4.8
 PyMySQL==1.0.2
 pyparsing==2.4.7
 pytest==6.2.4
+pytest-assume==2.4.3
 requests==2.26.0
 rsa==4.7.2
 ruamel.yaml==0.17.15
