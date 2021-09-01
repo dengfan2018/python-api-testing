@@ -22,6 +22,7 @@ class HandleIni:
         if not os.path.exists(self.conf_path):
             raise FileNotFoundError("配置文件不存在！")
         self.cf = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
+        self.cf.read(self.conf_path, encoding="utf-8")
 
     def get_value(self, section, option):
         """
@@ -30,7 +31,6 @@ class HandleIni:
         :param option: 
         :return: 
         """""
-        self.cf.read(self.conf_path, encoding="utf-8")
         return self.cf.get(section, option)
 
     def get_section_value(self, section):
@@ -39,7 +39,6 @@ class HandleIni:
         :param section: 
         :return: 
         """""
-        self.cf.read(self.conf_path, encoding="utf-8")
         return dict(self.cf.items(section))
 
     def get_option_all(self, section):
@@ -48,21 +47,18 @@ class HandleIni:
         :param section:
         :return:
         """
-        self.cf.read(self.conf_path, encoding="utf-8")
         return self.cf.options(section)
 
     def set_value(self, section, option, value):
         """设置配置文件中section下option的值"""
-        self.cf.read(self.conf_path)
         self.cf.set(section, option, value)
-        with open(self.conf_path, "w") as f:
+        with open(self.conf_path, "w", encoding="utf8") as f:
             self.cf.write(f)
 
     def add_section(self, section):
         """在配置文件添加section"""
-        self.cf.read(self.conf_path)
         self.cf.add_section(section)
-        with open(self.conf_path, "w") as f:
+        with open(self.conf_path, "w", encoding="utf8") as f:
             self.cf.write(f)
 
 
