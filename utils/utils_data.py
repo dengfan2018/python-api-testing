@@ -49,12 +49,12 @@ def get_old_phone():
     """
     from common.handle_conf import HandleIni
     conf = HandleIni()
-    user = conf.get_value("general_user", "user")
-    passwd = conf.get_value("general_user", "passwd")
+    user = conf.get("general_user", "user")
+    passwd = conf.get("general_user", "passwd")
     return user, passwd
 
 
-def data_pre(data, token=HandleIni("conf.ini").get_value("request_headers", "token")):
+def data_pre(data, token=HandleIni("conf.ini").get("request_headers", "token")):
     """
     如果 data 是字符串，则转换成字典对象。
     """
@@ -66,7 +66,7 @@ def data_pre(data, token=HandleIni("conf.ini").get_value("request_headers", "tok
         data = eval(data)
 
     # 如果是v3版本，需要加上sign和timestamp2个参数。
-    if HandleIni("conf.ini").get_value("request_headers", "X-Lemonban-Media-Type") == "lemonban.v3" \
+    if HandleIni("conf.ini").get("request_headers", "X-Lemonban-Media-Type") == "lemonban.v3" \
             and token:
         from utils.utils_encryption import generator_sign
         sign, timestamp = generator_sign(token)
@@ -121,7 +121,7 @@ def replace_by_regular(data):
         for item in res:
             # 得到标识符对应的值。
             try:
-                value = HandleIni("conf.ini").get_value("data", item)
+                value = HandleIni("conf.ini").get("data", item)
             except:
                 try:
                     value = getattr(EnvData, item)

@@ -22,7 +22,7 @@ class HandleHttp:
         """
         拼接接口的url地址。
         """
-        base_url = conf.get_value("pytest", "base_url")
+        base_url = conf.get("pytest", "base_url")
 
         if path.startswith("/"):
             return base_url + path
@@ -38,7 +38,7 @@ class HandleHttp:
 
         :return: 处理之后 headers 字典
         """
-        h = conf.get_section_value("request_headers")
+        h = conf.items_dict("request_headers")
         [h.pop(k) for k, v in h.copy().items() if not v]
         if headers:
             h.update(eval(headers))
@@ -50,9 +50,9 @@ class HandleHttp:
         url = self.__pre_url(url)
         from utils.utils_data import data_pre
         if data:
-            data = data_pre(data, conf.get_value("request_headers", "token"))
+            data = data_pre(data, conf.get("request_headers", "token"))
         if json:
-            json = data_pre(json, conf.get_value("request_headers", "token"))
+            json = data_pre(json, conf.get("request_headers", "token"))
 
         self.create_request_log(url, method, json if json else (params if params else data), headers, **kwargs)
 

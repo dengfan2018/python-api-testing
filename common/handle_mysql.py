@@ -12,7 +12,7 @@ from common.handle_conf import HandleIni
 
 class HandleMysql:
 
-    def __init__(self, db_config=HandleIni("conf.ini").get_section_value("mysql")):
+    def __init__(self, db_config=HandleIni("conf.ini").items_dict("mysql")):
         db_config['port'] = int(db_config['port'])
         self.connection = pymysql.connect(**db_config)
         # self.connection.autocommit(True)
