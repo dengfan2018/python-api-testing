@@ -41,6 +41,27 @@ def load_all_data_from_xls(filename, sheet_name: str, parent=project.casedatas_d
     return sheet_values
 
 
+class HandleExcel:
+    def __init__(self, filename, sheet_name: str, parent=project.casedatas_dir):
+        self.filename = str(parent.joinpath(filename))
+        self.sheet_name = sheet_name
+
+    def write_data(self, row, column, value):
+        try:
+            wb = load_workbook(self.filename)
+            sheet = wb[self.sheet_name.strip()]
+            sheet.cell(row=row, column=column, value=value)
+            wb.save(self.filename)
+        except FileNotFoundError as e:
+            log.error(f'excel文件不存在---{e}')
+        except IndexError as e:
+            log.error(f'sheet不存在---{e}')
+
+
 if __name__ == '__main__':
+    # xls_write = HandleExcel("api_cases.xlsx", "注册")
+    # xls_write.write_data(20,1, "注册")
 
     print(load_all_data_from_xls("api_cases.xlsx", "注册"))
+
+
