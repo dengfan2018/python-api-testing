@@ -70,9 +70,30 @@ class HandleYaml:
         return json.loads(data)
 
 
+class GetYaml:
+    """获取 yaml 文件中的数据
+    通过类属性的方式调用
+    """
+
+    def __init__(self, filename, parent=project.casedatas_dir):
+        self.filename = filename
+        self.parent = parent
+        self.yaml = YAML(typ='safe')
+        self._data = None
+
+    @property
+    def data(self):
+        if self._data is None:
+            return self.yaml.load(self.parent.joinpath(self.filename))
+        return self._data
+
+
 if __name__ == '__main__':
     cases = HandleYaml.get_data("a-register.yaml")
-    print(cases)
+    # print(cases)
+
+    cases2 = GetYaml("a-register.yaml").data
+    print(cases2)
 
     print(HandleIni("conf.ini").get("request_headers", "token"))
     print(HandleIni("conf.ini").get("request_headers", "authorization"))
