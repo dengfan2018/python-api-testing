@@ -21,10 +21,12 @@ pyparsing==2.4.7
 pytest==6.2.4
 pytest-assume==2.4.3
 requests==2.26.0
+requests-toolbelt==0.9.1
 rsa==4.7.2
 ruamel.yaml==0.17.15
 ruamel.yaml.clib==0.2.6
 six==1.16.0
 toml==0.10.2
 urllib3==1.26.6
+websocket-client==1.2.1
 win32-setctime==1.0.3
