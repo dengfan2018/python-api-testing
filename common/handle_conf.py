@@ -19,7 +19,7 @@ class HandleIni(configparser.ConfigParser):
 
     def __init__(self, filename="conf.ini", parent=project.conf_dir, interpolation=configparser.ExtendedInterpolation()):
         """
-        继承 ConfigParser 类，并指定 self._interpolation 以支持
+        继承 ConfigParser 类，并指定 self._interpolation 以支持插值
         :param filename:
         :param parent:
         :param interpolation:
