@@ -32,6 +32,11 @@ class HandleIni(configparser.ConfigParser):
 
         self.read(self.conf_path, encoding="utf-8")
 
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(HandleIni, "_instance"):
+            HandleIni._instance = object.__new__(cls)
+        return HandleIni._instance
+
     def items_dict(self, section):
         """
         获取 section 下全部的值，返回字典形式"
@@ -97,6 +102,6 @@ if __name__ == '__main__':
 
     print(HandleIni("conf.ini").get("request_headers", "token"))
     print(HandleIni("conf.ini").get("request_headers", "authorization"))
-    print(HandleIni("conf.ini").items("data"))
+    print(HandleIni("conf.ini").items_dict("data"))
 
 
